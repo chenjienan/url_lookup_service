@@ -4,7 +4,7 @@ import unittest
 from project.tests.base import BaseTestCase
 
 
-class TestUserService(BaseTestCase):
+class TestUrlService(BaseTestCase):
     """Tests for the URL Lookup Service."""
     def test_urls(self):
         """Ensure the /ping route behaves correctly."""
@@ -28,6 +28,42 @@ class TestUserService(BaseTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn('https://www.google.com was added!', data['message'])
             self.assertIn('success', data['status'])
+
+    def test_add_url_invalid_json(self):
+        """Ensure error is thrown if the JSON object is empty."""
+        with self.client:
+            response = self.client.post(
+                '/urls',
+                data=json.dumps({}),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('Invalid payload.', data['message'])
+            self.assertIn('fail', data['status'])
+
+    def test_add_duplicate_url(self):
+        """Ensure error is thrown if the url already exists."""
+        with self.client:
+            self.client.post(
+                '/urls',
+                data=json.dumps({
+                    'url': 'https://www.amazon.com'
+                }),
+                content_type='application/json',
+            )
+            response = self.client.post(
+                '/urls',
+                data=json.dumps({
+                    'url': 'https://www.amazon.com'
+                }),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn(
+                'That url already exists.', data['message'])
+            self.assertIn('fail', data['status'])
 
 
 if __name__ == '__main__':
