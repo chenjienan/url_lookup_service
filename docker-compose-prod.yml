@@ -5,15 +5,17 @@ services:
   url_lookup:
     build:
       context: ./services/url_lookup
-      dockerfile: Dockerfile
-    volumes:
-      - './services/url_lookup:/usr/src/app'
-    ports:
-      - 5001:5000
+      dockerfile: Dockerfile-prod
+    # volumes:
+    #   - './services/url_lookup:/usr/src/app'
+    # ports:
+    #   - 5001:5000
+    expose: 
+      - 5000
     environment:
-      - FLASK_ENV=development
-      - APP_SETTINGS=project.config.DevelopmentConfig
-      - DATABASE_URL=postgres://postgres:postgres@url-db:5432/url_dev  
+      - FLASK_ENV=production
+      - APP_SETTINGS=project.config.ProductionConfig
+      - DATABASE_URL=postgres://postgres:postgres@url-db:5432/url_prod  
       - DATABASE_TEST_URL=postgres://postgres:postgres@url-db:5432/url_test  
     depends_on:  
       - url-db
@@ -22,16 +24,18 @@ services:
     build:
       context: ./services/url_lookup/project/db
       dockerfile: Dockerfile
-    ports:
-      - 5435:5432
+    # ports:
+    #   - 5435:5432
+    expose:
+      - 5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
+  
   nginx:
     build:
       context: ./services/nginx
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-prod
     restart: always
     ports:
       - 80:80

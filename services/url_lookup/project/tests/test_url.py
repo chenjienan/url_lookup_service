@@ -69,7 +69,7 @@ class TestUrlService(BaseTestCase):
     def test_get_urlinfo_url_not_exist(self):
         """Ensure get URL info behaves correctly."""
         with self.client:
-            response = self.client.get(f'/urlinfo/google.com:443/something/something.html%3Fq%3Dgo%2Blang')
+            response = self.client.get(f'/urlinfo/google.com:443/something.html%3Fq%3Dgo%2Blang')
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 200)
             self.assertIn('success', data['status'])
@@ -87,7 +87,7 @@ class TestUrlService(BaseTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('success', data['status'])
             self.assertIn('true', data['isMalware'])
-    
+
     def test_get_urlinfo_url_empty(self):
         with self.client:
             response = self.client.get(f'/urlinfo/')

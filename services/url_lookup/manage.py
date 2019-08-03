@@ -29,8 +29,8 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    db.session.add(Url(url='www.google.com'))
-    db.session.add(Url(url='www.amazon.ca'))
+    db.session.add(Url(url='google.com'))
+    db.session.add(Url(url='amazon.ca'))
     db.session.commit()
 
 

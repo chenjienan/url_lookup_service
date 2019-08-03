@@ -6,7 +6,7 @@ from sqlalchemy import exc
 from project import db
 from project.api.models import Url
 
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote
 
 url_blueprint = Blueprint('url', __name__)
 api = Api(url_blueprint)
@@ -17,13 +17,12 @@ class UrlList(Resource):
         """ Get all urls """
         response_obj = {
             'status': 'success',
-            'data':{
-                'urls':[url.to_json() for url in Url.query.all()]
+            'data': {
+                'urls': [url.to_json() for url in Url.query.all()]
             }
         }
 
         return response_obj, 200
-
 
     def post(self):
         """ add url to the system """
@@ -58,35 +57,31 @@ class UrlList(Resource):
 
 class UrlInfo(Resource):
 
-    def get(self, path=None):
+    def get(self, input_url=None):
         """ Get url details """
 
         response_obj = {
             'status': 'fail',
-            'url': None,
-            'target_url': None,
+            'url': input_url,
             'isMalware': None
         }
-            
-        path = request.full_path
-        url = unquote(path)[9:]        
-        
+
+        url = unquote(input_url)
+
         try:
             cur_url = Url.query.filter_by(url=url).first()
-            # for testing purpose
-            response_obj['url'] = url
-            response_obj['target_url'] = cur_url
+
             response_obj['status'] = 'success'
             if not cur_url:
                 response_obj['isMalware'] = 'false'
                 return response_obj, 200
-            # elif cur_url and not cur_url.active:
-            #     response_obj['isMalware'] = 'false'
-            #     return response_obj, 200 
-            
+            elif cur_url and not cur_url.active:
+                response_obj['isMalware'] = 'false'
+                return response_obj, 200
+
             response_obj['isMalware'] = 'true'
             return response_obj, 200
-        
+
         except ValueError:
             return response_obj, 404
 
@@ -101,4 +96,4 @@ class UrlPing(Resource):
 
 api.add_resource(UrlPing, '/ping')
 api.add_resource(UrlList, '/urls')
-api.add_resource(UrlInfo, '/urlinfo/<path:path>')
+api.add_resource(UrlInfo, '/urlinfo/<path:input_url>')
