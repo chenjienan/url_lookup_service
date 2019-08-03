@@ -10,3 +10,10 @@ class Url(db.Model):
 
     def __init__(self, url):
         self.url = url
+
+    def to_json(self):
+        return {
+            'id':self.id,
+            'url': self.url,
+            'active': self.active
+        }

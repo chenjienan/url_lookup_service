@@ -1,9 +1,8 @@
 from flask.cli import FlaskGroup
-from project import app, db
 import sys
 import unittest
 
-from project import create_app, db   # new
+from project import create_app, db
 from project.api.models import Url
 
 app = create_app()
@@ -25,6 +24,14 @@ def test():
     if result.wasSuccessful():
         return 0
     sys.exit(result)
+
+
+@cli.command('seed_db')
+def seed_db():
+    """Seeds the database."""
+    db.session.add(Url(url='www.google.com'))
+    db.session.add(Url(url='www.amazon.ca'))
+    db.session.commit()
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ services:
     ports:
       - 5001:5000
     environment:
-      - FLASK_ENV=developments
+      - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@url-db:5432/url_dev  
       - DATABASE_TEST_URL=postgres://postgres:postgres@url-db:5432/url_test  
