@@ -23,4 +23,5 @@ COPY . /usr/src/app
 
 # run server
 # CMD ["/usr/src/app/entrypoint-prod.sh"]
-CMD gunicorn -b 0.0.0.0:5000 manage:app
+# CMD gunicorn -b 0.0.0.0:5000 manage:app
+CMD python manage.py run -h 0.0.0.0

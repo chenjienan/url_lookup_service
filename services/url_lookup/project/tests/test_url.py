@@ -50,14 +50,14 @@ class TestUrlService(BaseTestCase):
             self.client.post(
                 '/urls',
                 data=json.dumps({
-                    'url': 'https://www.amazon.com'
+                    'url': 'amazon.com'
                 }),
                 content_type='application/json',
             )
             response = self.client.post(
                 '/urls',
                 data=json.dumps({
-                    'url': 'https://www.amazon.com'
+                    'url': 'amazon.com'
                 }),
                 content_type='application/json',
             )
@@ -82,7 +82,7 @@ class TestUrlService(BaseTestCase):
         db.session.commit()
 
         with self.client:
-            response = self.client.get(f'/urlinfo/abc.com')
+            response = self.client.get(f'/urlinfo/abc.com/somepath?q=abc')
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 200)
             self.assertIn('success', data['status'])

@@ -8,6 +8,8 @@ from project.api.models import Url
 
 from urllib.parse import unquote
 
+import tldextract
+
 url_blueprint = Blueprint('url', __name__)
 api = Api(url_blueprint)
 
@@ -59,17 +61,21 @@ class UrlInfo(Resource):
 
     def get(self, input_url=None):
         """ Get url details """
+        url = unquote(input_url)
+
+        # post-process for domain/host extraction
+        ext = tldextract.extract(url)
+        host = '.'.join(part for part in ext if part)
 
         response_obj = {
             'status': 'fail',
             'url': input_url,
+            'host': host,
             'isMalware': None
         }
 
-        url = unquote(input_url)
-
         try:
-            cur_url = Url.query.filter_by(url=url).first()
+            cur_url = Url.query.filter_by(url=host).first()
 
             response_obj['status'] = 'success'
             if not cur_url:

@@ -4,3 +4,6 @@ Flask-SQLAlchemy==2.4.0
 psycopg2-binary==2.8.3
 Flask-Testing==0.7.1
 gunicorn==19.9.0
+tldextract==2.2.1
+coverage==4.5.4
+flake8===3.7.7
