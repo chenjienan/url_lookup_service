@@ -47,19 +47,19 @@ docker-compose up -d --build
 
 Recreate database
 
-       docker-compose exec users python manage.py recreate_db
+       docker-compose exec url_lookup python manage.py recreate_db
 
 Seed the Database
 
-       docker-compose exec users python manage.py seed_db
+       docker-compose exec url_lookup python manage.py seed_db
 
 Run unit tests
 
-       docker-compose exec users python manage.py test
+       docker-compose exec url_lookup python manage.py test
 
 Check code coverage
 
-       docker-compose exec users python manage.py cov
+       docker-compose exec url_lookup python manage.py cov
 
 -------------------------------
 We have an HTTP proxy that is scanning traffic looking for malware URL's. Before allowing HTTP connections to be made, this proxy asks a service that maintains several databases of malware URL's if the resource being requested is known to contain malware.
