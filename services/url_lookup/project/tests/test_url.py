@@ -26,14 +26,14 @@ class TestUrlService(BaseTestCase):
             response = self.client.post(
                 '/urls',
                 data=json.dumps({
-                    'url': 'https://www.google.com'
+                    'url': 'google.com'
                 }),
                 content_type='application/json',
             )
             data = json.loads(response.data.decode())
             # Assert
             self.assertEqual(response.status_code, 201)
-            self.assertIn('https://www.google.com was added!', data['message'])
+            self.assertIn('google.com was added!', data['message'])
             self.assertIn('success', data['status'])
 
     def test_add_url_invalid_json(self):
